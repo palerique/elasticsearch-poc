@@ -1,0 +1,121 @@
+{
+    "size": 0,
+    "query": {
+        "bool": {
+            "must": [
+                {
+                    "term": {
+                        "context.service.tenantId": {
+                            "value": "sometenantid",
+                            "boost": 1.0
+                        }
+                    }
+                },
+                {
+                    "range": {
+                        "timestamp": {
+                            "from": 1582073131209,
+                            "to": 1645145131210,
+                            "include_lower": true,
+                            "include_upper": true,
+                            "boost": 1.0
+                        }
+                    }
+                },
+                {
+                    "terms": {
+                        "activity.action": [
+                            "statuspointsmodified"
+                        ],
+                        "boost": 1.0
+                    }
+                },
+                {
+                    "exists": {
+                        "field": "activity.actionObject.extras.pointTotal",
+                        "boost": 1.0
+                    }
+                },
+                {
+                    "range": {
+                        "activity.actor.objectId": {
+                            "from": 0,
+                            "to": null,
+                            "include_lower": false,
+                            "include_upper": true,
+                            "boost": 1.0
+                        }
+                    }
+                },
+                {
+                    "term": {
+                        "activity.actor.visible": {
+                            "value": true,
+                            "boost": 1.0
+                        }
+                    }
+                },
+                {
+                    "terms": {
+                        "activity.actor.type": [
+                            "regular",
+                            "partner"
+                        ],
+                        "boost": 1.0
+                    }
+                }
+            ],
+            "adjust_pure_negative": true,
+            "boost": 1.0
+        }
+    },
+    "aggregations": {
+        "users": {
+            "terms": {
+                "field": "activity.actor.objectId",
+                "size": 1000,
+                "min_doc_count": 1,
+                "shard_min_doc_count": 0,
+                "show_term_doc_count_error": false,
+                "order": [
+                    {
+                        "max_points": "desc"
+                    },
+                    {
+                        "_key": "asc"
+                    }
+                ]
+            },
+            "aggregations": {
+                "max_points": {
+                    "max": {
+                        "field": "activity.actionObject.extras.pointTotal"
+                    }
+                },
+                "extra_fields_top_hits": {
+                    "top_hits": {
+                        "from": 0,
+                        "size": 1,
+                        "version": false,
+                        "seq_no_primary_term": false,
+                        "explain": false,
+                        "_source": {
+                            "includes": [
+                                "activity.actor.name",
+                                "activity.actor.username"
+                            ],
+                            "excludes": []
+                        },
+                        "sort": [
+                            {
+                                "timestamp": {
+                                    "order": "desc"
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}
