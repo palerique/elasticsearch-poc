@@ -34,58 +34,9 @@ public class App {
                 createPerson(client, gson);
             }
 
-            //            searchAll(client, gson);
-
             List<Person> people = getAllDocs(client, gson);
             System.out.println(MessageFormat.format("people size = {0}\n{1}", people.size(), people));
         }
-
-        //        BoolQueryBuilder queryFilters = QueryBuilders.boolQuery()
-        //                // tenantId must equal params tenantId
-        //                .must(QueryBuilders.termQuery("context.service.tenantId", "sometenantid"))
-        //                // limit to timeRange from params
-        //                .must(QueryBuilders.rangeQuery("timestamp")
-        //                        .gte(Instant.now().minus(365, ChronoUnit.DAYS).toEpochMilli())
-        //                        .lte(Instant.now().plus(365, ChronoUnit.DAYS).toEpochMilli()));
-        //
-        //        queryFilters.must(QueryBuilders.termsQuery("activity.action",
-        //                "statuspointsmodified"));
-        //        queryFilters.must(QueryBuilders.existsQuery("activity.actionObject.extras.pointTotal"));
-        //        queryFilters = onlyVisibleUsers(queryFilters);
-        //
-        //        MaxAggregationBuilder maxPointsSubAggregation = AggregationBuilders.max("max_points")
-        //                .field("activity.actionObject.extras.pointTotal");
-        //        TopHitsAggregationBuilder extraFieldsTopHitsSubAggregation = AggregationBuilders
-        //                .topHits("extra_fields_top_hits")
-        //                .sort(SortBuilders.fieldSort("timestamp").order(SortOrder.DESC))
-        //                .fetchSource(new String[]{"activity.actor.name", "activity.actor.username"}, null)
-        //                .size(1);
-        //        TermsAggregationBuilder usersTermAggregation = AggregationBuilders
-        //                .terms("users")
-        //                .field("activity.actor.objectId")
-        //                .size(1000)
-        //                .order(BucketOrder.aggregation("max_points", false))
-        //                .subAggregation(maxPointsSubAggregation)
-        //                .subAggregation(extraFieldsTopHitsSubAggregation);
-        //
-        //        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
-        //                .size(0);
-        //
-        //        SearchRequest searchRequest = new SearchRequest(new String[0])
-        //                .source(searchSourceBuilder)
-        //                .indicesOptions(IndicesOptions.lenientExpandOpen())
-        //                .searchType(SearchType.QUERY_THEN_FETCH);
-        //
-        //        searchRequest.source().query(queryFilters).aggregation(usersTermAggregation);
-        //
-        //        SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
-        //        SearchHit[] searchHits = response.getHits().getHits();
-        //        List<String> results =
-        //                Arrays.stream(searchHits)
-        //                        .map(SearchHit::getSourceAsString)
-        //                        .collect(Collectors.toList());
-        //
-        //        System.out.println(results);
     }
 
     private static void createPerson(RestHighLevelClient client, Gson gson) throws IOException {
